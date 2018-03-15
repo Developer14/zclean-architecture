@@ -127,7 +127,7 @@ public class DogsControllerTest {
         when(breedDetailsUseCase.breedDetailsUseCase(anyString())).thenReturn(dog);
         when(conversionService.convert(any(Dog.class), any(Class.class))).thenReturn(dogDto);
 
-        mockMvc.perform(get("/dogs/pug")
+        mockMvc.perform(get("/dogs/pug/details")
                     .accept(MediaType.APPLICATION_JSON)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(dogDto)))
@@ -153,7 +153,7 @@ public class DogsControllerTest {
         responseDto.setStatusMessage("error");
         responseDto.setData(null);
 
-        mockMvc.perform(get("/dogs/pug")
+        mockMvc.perform(get("/dogs/pug/details")
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(dogDto)))

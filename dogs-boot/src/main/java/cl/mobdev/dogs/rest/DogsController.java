@@ -46,7 +46,7 @@ public class DogsController {
         return new ResponseEntity<ResponseDto<DogListDto>>(responseDto, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/{breed}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{breed}/details", method = RequestMethod.GET)
     public ResponseEntity<ResponseDto<DogDto>> dogDetails(@PathVariable String breed){
 
         ResponseDto<DogDto> responseDto = new ResponseDto<DogDto>();

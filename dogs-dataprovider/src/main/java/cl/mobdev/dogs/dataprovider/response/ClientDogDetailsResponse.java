@@ -2,7 +2,7 @@ package cl.mobdev.dogs.dataprovider.response;
 
 import java.util.Arrays;
 
-public class ClientResponse {
+public class ClientDogDetailsResponse {
 
     private String status;
     private String[] message;
@@ -25,7 +25,7 @@ public class ClientResponse {
 
     @Override
     public String toString() {
-        return "ClientResponse{" +
+        return "ClientDogDetailsResponse{" +
                 "status='" + getStatus() + '\'' +
                 ", message=" + Arrays.toString(getMessage()) +
                 '}';

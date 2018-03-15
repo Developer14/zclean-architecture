@@ -3,7 +3,9 @@ package cl.mobdev.dogs.dataprovider;
 
 import cl.mobdev.dogs.core.entity.Dog;
 import cl.mobdev.dogs.core.usecase.exception.DataProviderException;
-import cl.mobdev.dogs.dataprovider.response.ClientResponse;
+import cl.mobdev.dogs.dataprovider.response.ClientDogDetailsResponse;
+import cl.mobdev.dogs.dataprovider.response.ClientDogDetailsResponseTest;
+import cl.mobdev.dogs.dataprovider.response.ClientDogListResponse;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +15,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -30,12 +33,15 @@ public class BreedRestClientTest {
     @Test
     public void allDogsTest() throws Exception{
 
-        ClientResponse clientResponse = new ClientResponse();
-        clientResponse.setMessage(new String[]{"Haunt", "Pug"});
-        clientResponse.setStatus("Ok");
+        ClientDogListResponse clientDogListResponse = new ClientDogListResponse();
+        Map<String, String[]> map = new HashMap<String, String[]>();
+        map.put("Haunt", null);
+        map.put("Pug", null);
+        clientDogListResponse.setMessage(map);
+        clientDogListResponse.setStatus("Ok");
 
         Mockito.when(restTemplate
-                .getForObject(Mockito.anyString(), Mockito.any(Class.class))).thenReturn(clientResponse);
+                .getForObject(Mockito.anyString(), Mockito.any(Class.class))).thenReturn(clientDogListResponse);
         List<String> list = breedRestClient.getBreedList();
 
         Assert.assertNotNull(list);
@@ -54,10 +60,10 @@ public class BreedRestClientTest {
     @SuppressWarnings("unchecked")
     public void breedDetailsTest() throws Exception{
 
-        ClientResponse subBreedsResponse = new ClientResponse();
+        ClientDogDetailsResponse subBreedsResponse = new ClientDogDetailsResponse();
         subBreedsResponse.setStatus("Ok");
         subBreedsResponse.setMessage(new String[]{"nnnnn", "mmmmm"});
-        ClientResponse imagesResponse = new ClientResponse();
+        ClientDogDetailsResponse imagesResponse = new ClientDogDetailsResponse();
         imagesResponse.setStatus("Ok");
         imagesResponse.setMessage(new String[]{"http://...", "http://..."});
 

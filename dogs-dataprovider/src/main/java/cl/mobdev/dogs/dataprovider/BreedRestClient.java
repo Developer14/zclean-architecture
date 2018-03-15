@@ -5,17 +5,18 @@ import cl.mobdev.dogs.core.entity.DogImage;
 import cl.mobdev.dogs.core.usecase.breeddetails.GetBreedDetails;
 import cl.mobdev.dogs.core.usecase.breedlist.GetBreedList;
 import cl.mobdev.dogs.core.usecase.exception.DataProviderException;
-import cl.mobdev.dogs.dataprovider.response.ClientResponse;
+import cl.mobdev.dogs.dataprovider.response.ClientDogDetailsResponse;
+import cl.mobdev.dogs.dataprovider.response.ClientDogListResponse;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.*;
 
 public class BreedRestClient implements GetBreedList, GetBreedDetails {
 
-    private final String baseUrl = "https://dog.ceo/api/breed";
-    private final String allDogsUrl = baseUrl + "/list/all";
-    private final String breedImagesUrl = baseUrl + "/{breedName}/images";
-    private final String subBreedsUrl = baseUrl + "/{breedName}/list";
+    private final String baseUrl = "https://dog.ceo/api";
+    private final String allDogsUrl = baseUrl + "/breeds/list/all";
+    private final String breedImagesUrl = baseUrl + "/breed/{breedName}/images";
+    private final String subBreedsUrl = baseUrl + "/breed/{breedName}/list";
 
     private RestTemplate restTemplate;
 
@@ -27,8 +28,14 @@ public class BreedRestClient implements GetBreedList, GetBreedDetails {
 
         try {
 
-            ClientResponse response = restTemplate.getForObject(allDogsUrl, ClientResponse.class);
-            return Arrays.asList(response.getMessage());
+            ClientDogListResponse response = restTemplate.getForObject(allDogsUrl, ClientDogListResponse.class);
+
+            List<String> list = new ArrayList<String>();
+            if(response.getMessage() != null)
+                for (Map.Entry<String, String[]> entry: response.getMessage().entrySet())
+                    list.add(entry.getKey());
+
+            return list;
 
         }catch (Exception e){
             throw new DataProviderException(e.getMessage(), e);
@@ -43,8 +50,8 @@ public class BreedRestClient implements GetBreedList, GetBreedDetails {
         try {
             params.put("breedName", breed);
 
-            ClientResponse subBreedsResponse = restTemplate.getForObject(subBreedsUrl, ClientResponse.class, params);
-            ClientResponse imagesResponse = restTemplate.getForObject(breedImagesUrl, ClientResponse.class, params);
+            ClientDogDetailsResponse subBreedsResponse = restTemplate.getForObject(subBreedsUrl, ClientDogDetailsResponse.class, params);
+            ClientDogDetailsResponse imagesResponse = restTemplate.getForObject(breedImagesUrl, ClientDogDetailsResponse.class, params);
 
             Dog dog = new Dog();
             dog.setBreed(breed);
